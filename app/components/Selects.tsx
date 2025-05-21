@@ -22,7 +22,7 @@ const SelectsContainer = styled.div`
   height: 44px;
   gap: 45px;
   border-radius: 10px;
-  border: 1px solid #DEE2E6;
+  border: 1px solid #dee2e6;
   padding: 0 20px;
   position: relative;
   background-color: white;
@@ -32,7 +32,6 @@ const Select = styled.div<SelectProps>`
   display: flex;
   padding: 12px 0;
   gap: 8px;
-  color: ${({ isOpen }) => (isOpen ? "#8338EC" : "#0D0F10")};
   font-family: FiraGO, Arial, sans-serif;
   font-weight: 400;
   font-size: 16px;
@@ -42,27 +41,29 @@ const Select = styled.div<SelectProps>`
   align-items: center;
   cursor: pointer;
   flex: 1;
+  color: ${({ isOpen }) => (isOpen ? "#8338EC" : "#0D0F10")};
 
-  &:hover {
-    color: #8338EC;
-
-    img {
-      filter: invert(33%) sepia(97%) saturate(2000%) hue-rotate(260deg) brightness(90%) contrast(90%);
-    }
-  }
-
-  img {
+  svg {
     transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
-    filter: ${({ isOpen }) =>
-      isOpen ? "invert(33%) sepia(97%) saturate(2000%) hue-rotate(260deg) brightness(90%) contrast(90%)" : "none"};
     width: 24px;
     height: 24px;
+    fill: currentColor; /* Inherit the color from the parent */
+  }
+
+  /* Hover styles only when dropdown is closed */
+  &:hover:not([data-is-open="true"]) {
+    color: #8338ec;
+  }
+
+  /* Reset styles when dropdown is closed */
+  &[data-is-open="false"] {
+    color: #0d0f10;
   }
 `;
 
 const Dropdown = styled.div`
   position: absolute;
-  border: 1px solid #8338EC;
+  border: 1px solid #8338ec;
   background-color: white;
   width: 688px;
   top: 100%;
@@ -113,7 +114,10 @@ const Selects = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -138,9 +142,16 @@ const Selects = () => {
     <Wrapper>
       <SelectsContainer ref={dropdownRef}>
         {options.map((text, index) => (
-          <Select key={index} onClick={handleClick} isOpen={isOpen}>
+          <Select
+            key={index}
+            onClick={handleClick}
+            isOpen={isOpen}
+            data-is-open={isOpen}
+          >
             <p>{text}</p>
-            <img src="icon.svg" alt="Dropdown arrow" width="24" height="24" />
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 10l5 5 5-5H7z" />
+            </svg>
           </Select>
         ))}
         {isOpen && (
