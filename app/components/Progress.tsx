@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 type Color = "yellow" | "orange" | "pink" | "blue";
@@ -47,7 +47,57 @@ const ProgressButton: React.FC<Props> = ({ color, statusList }) => {
   return <Button color={color}>{text}</Button>;
 };
 
-export default ProgressButton;
+const ProgressButtonList: React.FC = () => {
+  const [statuses, setStatuses] = useState<Status[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      try {
+        const response = await fetch("https://momentum.redberryinternship.ge/api/statuses", {
+          headers: {
+            Authorization: `Bearer 9ef99feb-6ef7-4cf6-b963-bc569b3435b3`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data: Status[] = await response.json();
+        setStatuses(data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch statuses");
+        setLoading(false);
+      }
+    };
+
+    fetchStatuses();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
+  // Map status names to colors
+  const statusColorMap: { [key: string]: Color } = {
+    "დასაწყები": "yellow",
+    "პროგრესში": "orange",
+    "მზად ტესტირებისთვის": "pink",
+    "დასრულებული": "blue",
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      {statuses.map((status) => (
+        <ProgressButton
+          key={status.id}
+          color={statusColorMap[status.name] || "yellow"}
+          statusList={statuses}
+        />
+      ))}
+    </div>
+  );
+};
 
 const Button = styled.div<{ color: Color }>`
   border: none;
@@ -84,3 +134,5 @@ const Button = styled.div<{ color: Color }>`
     }
   }};
 `;
+
+export default ProgressButtonList;
