@@ -2,16 +2,31 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
-// Static data
-const DEPARTMENTS = ["Marketing", "Sales", "Engineering"];
-const PRIORITIES = ["High", "Medium", "Low"];
-const EMPLOYEES = ["John Doe", "Jane Smith", "Alex Johnson"];
-
-// Define the props interface for Select
-interface SelectProps extends React.HTMLAttributes<HTMLDivElement> {
-  isOpen: boolean;
+// Interfaces
+interface Department {
+  id: number;
+  name: string;
 }
 
+interface Priority {
+  id: number;
+  name: string;
+  icon: string;
+}
+
+interface Employee {
+  id: number;
+  name: string;
+  surname: string;
+  avatar: string;
+  department_id: number;
+  department: {
+    id: number;
+    name: string;
+  };
+}
+
+// Styled components
 const Wrapper = styled.div`
   margin-left: 120px;
 `;
@@ -28,34 +43,30 @@ const SelectsContainer = styled.div`
   background-color: white;
 `;
 
-const Select = styled.div<SelectProps>`
+const Select = styled.div<{ $isOpen: boolean }>`
   display: flex;
   padding: 12px 0;
   gap: 8px;
   font-family: FiraGO, Arial, sans-serif;
   font-weight: 400;
   font-size: 16px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  text-align: center;
   align-items: center;
   cursor: pointer;
   flex: 1;
-  color: ${({ isOpen }) => (isOpen ? "#8338EC" : "#0D0F10")};
+  color: ${({ $isOpen }) => ($isOpen ? "#8338EC" : "#0D0F10")};
 
   svg {
-    transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+    transform: ${({ $isOpen }) =>
+      $isOpen ? "rotate(180deg)" : "rotate(0deg)"};
     width: 24px;
     height: 24px;
-    fill: currentColor; /* Inherit the color from the parent */
+    fill: currentColor;
   }
 
-  /* Hover styles only when dropdown is closed */
   &:hover:not([data-is-open="true"]) {
     color: #8338ec;
   }
 
-  /* Reset styles when dropdown is closed */
   &[data-is-open="false"] {
     color: #0d0f10;
   }
@@ -91,6 +102,7 @@ const SelectedItems = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: 10px;
 `;
 
 const SelectedItem = styled.div`
@@ -99,44 +111,166 @@ const SelectedItem = styled.div`
   border-radius: 15px;
 `;
 
+// Main component
 const Selects = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<{
+    departments: string[];
+    priorities: string[];
+    employees: string[];
+  }>({ departments: [], priorities: [], employees: [] });
+
+  const [checkedItems, setCheckedItems] = useState<{
+    departments: boolean[];
+    priorities: boolean[];
+    employees: boolean[];
+  }>({
+    departments: [],
+    priorities: [],
+    employees: [],
+  });
+
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [priorities, setPriorities] = useState<Priority[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const options = ["დეპარტამენტი", "პრიორიტეტი", "თანამშრომელი"];
-  const allData = [...DEPARTMENTS, ...PRIORITIES, ...EMPLOYEES];
 
   useEffect(() => {
-    setCheckedItems(new Array(allData.length).fill(false));
+    const fetchDepartments = async () => {
+      try {
+        const res = await fetch(
+          "https://momentum.redberryinternship.ge/api/departments",
+          {
+            headers: {
+              Authorization: "Bearer 9ef99feb-6ef7-4cf6-b963-bc569b3435b3",
+            },
+          }
+        );
+        const data: Department[] = await res.json();
+        setDepartments(data);
+      } catch (error) {
+        console.error("Departments fetch error:", error);
+      }
+    };
+    fetchDepartments();
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const fetchPriorities = async () => {
+      try {
+        const res = await fetch(
+          "https://momentum.redberryinternship.ge/api/priorities",
+          {
+            headers: {
+              Authorization: "Bearer 9ef99feb-6ef7-4cf6-b963-bc569b3435b3",
+            },
+          }
+        );
+        const data: Priority[] = await res.json();
+        setPriorities(data);
+      } catch (error) {
+        console.error("Priorities fetch error:", error);
+      }
+    };
+    fetchPriorities();
+  }, []);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const res = await fetch(
+          "https://momentum.redberryinternship.ge/api/employees",
+          {
+            headers: {
+              Authorization: "Bearer 9ef99feb-6ef7-4cf6-b963-bc569b3435b3",
+            },
+          }
+        );
+        const data: Employee[] = await res.json();
+        setEmployees(data);
+      } catch (error) {
+        console.error("Employees fetch error:", error);
+      }
+    };
+    fetchEmployees();
+  }, []);
+
+  useEffect(() => {
+    setCheckedItems({
+      departments: new Array(departments.length).fill(false),
+      priorities: new Array(priorities.length).fill(false),
+      employees: new Array(employees.length).fill(false),
+    });
+  }, [departments.length, priorities.length, employees.length]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(e.target as Node)
       ) {
-        setIsOpen(false);
+        setOpenDropdown(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleClick = () => {
-    setIsOpen(!isOpen);
+  const handleClick = (option: string) => {
+    setOpenDropdown(openDropdown === option ? null : option);
   };
 
-  const handleCheckboxChange = (index: number) => {
-    const updatedCheckedItems = [...checkedItems];
-    updatedCheckedItems[index] = !updatedCheckedItems[index];
-    setCheckedItems(updatedCheckedItems);
+  const handleCheckboxChange = (index: number, category: string) => {
+    const updatedChecked = { ...checkedItems };
+    const updatedSelected = { ...selectedItems };
 
-    const selected = allData.filter((_, idx) => updatedCheckedItems[idx]);
-    setSelectedItems(selected);
+    if (category === "departments") {
+      updatedChecked.departments[index] = !updatedChecked.departments[index];
+      updatedSelected.departments = departments
+        .filter((_, i) => updatedChecked.departments[i])
+        .map((d) => d.name);
+    } else if (category === "priorities") {
+      updatedChecked.priorities[index] = !updatedChecked.priorities[index];
+      updatedSelected.priorities = priorities
+        .filter((_, i) => updatedChecked.priorities[i])
+        .map((p) => p.name);
+    } else if (category === "employees") {
+      updatedChecked.employees[index] = !updatedChecked.employees[index];
+      updatedSelected.employees = employees
+        .filter((_, i) => updatedChecked.employees[i])
+        .map((e) => `${e.name} ${e.surname}`);
+    }
+
+    setCheckedItems(updatedChecked);
+    setSelectedItems(updatedSelected);
   };
+
+  const getCurrentData = () => {
+    if (openDropdown === "დეპარტამენტი") {
+      return {
+        data: departments.map((d) => d.name),
+        category: "departments",
+        checks: checkedItems.departments,
+      };
+    } else if (openDropdown === "პრიორიტეტი") {
+      return {
+        data: priorities.map((p) => p.name),
+        category: "priorities",
+        checks: checkedItems.priorities,
+      };
+    } else if (openDropdown === "თანამშრომელი") {
+      return {
+        data: employees.map((e) => `${e.name} ${e.surname}`),
+        category: "employees",
+        checks: checkedItems.employees,
+      };
+    }
+    return { data: [], category: "", checks: [] };
+  };
+
+  const { data: currentData, category, checks } = getCurrentData();
 
   return (
     <Wrapper>
@@ -144,24 +278,24 @@ const Selects = () => {
         {options.map((text, index) => (
           <Select
             key={index}
-            onClick={handleClick}
-            isOpen={isOpen}
-            data-is-open={isOpen}
+            onClick={() => handleClick(text)}
+            $isOpen={openDropdown === text}
+            data-is-open={openDropdown === text}
           >
             <p>{text}</p>
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 24 24">
               <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </Select>
         ))}
-        {isOpen && (
+        {openDropdown && (
           <Dropdown>
-            {allData.map((item, idx) => (
+            {currentData.map((item, idx) => (
               <Option key={idx}>
                 <input
                   type="checkbox"
-                  checked={checkedItems[idx] || false}
-                  onChange={() => handleCheckboxChange(idx)}
+                  checked={checks[idx] || false}
+                  onChange={() => handleCheckboxChange(idx, category)}
                 />
                 <span>{item}</span>
               </Option>
@@ -171,7 +305,11 @@ const Selects = () => {
       </SelectsContainer>
 
       <SelectedItems>
-        {selectedItems.map((item) => (
+        {[
+          ...selectedItems.departments,
+          ...selectedItems.priorities,
+          ...selectedItems.employees,
+        ].map((item) => (
           <SelectedItem key={item}>{item}</SelectedItem>
         ))}
       </SelectedItems>

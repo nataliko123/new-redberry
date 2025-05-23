@@ -42,15 +42,21 @@ const CardContainer = styled(Link)<{ border: Border }>`
   gap: 28px;
   padding: 20px;
   background-color: rgba(255, 255, 255, 1);
-  border: 1px solid ${({ border }) => {
-    switch (border) {
-      case "pink": return "rgba(255, 0, 110, 1)";
-      case "red": return "rgba(251, 86, 7, 1)";
-      case "blue": return "rgba(58, 134, 255, 1)";
-      case "yellow": return "rgba(247, 188, 48, 1)";
-      default: return "rgba(206, 212, 218, 1)";
-    }
-  }};
+  border: 1px solid
+    ${({ border }) => {
+      switch (border) {
+        case "pink":
+          return "rgba(255, 0, 110, 1)";
+        case "red":
+          return "rgba(251, 86, 7, 1)";
+        case "blue":
+          return "rgba(58, 134, 255, 1)";
+        case "yellow":
+          return "rgba(247, 188, 48, 1)";
+        default:
+          return "rgba(206, 212, 218, 1)";
+      }
+    }};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -167,7 +173,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 1,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "high" },
     employee: {
@@ -183,7 +190,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 2,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "medium" },
     employee: {
@@ -199,7 +207,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 3,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "low" },
     employee: {
@@ -215,7 +224,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 4,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "high" },
     employee: {
@@ -231,7 +241,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 5,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "medium" },
     employee: {
@@ -247,7 +258,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 6,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "low" },
     employee: {
@@ -263,7 +275,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 7,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "high" },
     employee: {
@@ -279,7 +292,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 8,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "medium" },
     employee: {
@@ -295,7 +309,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 9,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "low" },
     employee: {
@@ -311,7 +326,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 10,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "high" },
     employee: {
@@ -327,7 +343,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 11,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "medium" },
     employee: {
@@ -343,7 +360,8 @@ const sampleTasks: TaskType[] = [
   {
     id: 12,
     name: "Redberry-ში ყველაზე მაგარი გუნდი",
-    description: "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
+    description:
+      "მთავარი ამოცანაა გავაკეთოთ ისეთი დიზაინი, რომელიც მაქსიმალურად მოერგება Redberry-ს",
     due_date: "2022-07-22",
     priority: { name: "low" },
     employee: {
@@ -368,8 +386,15 @@ const SingleCard = ({
   border: Border;
   task: TaskType;
 }) => {
-  const { id, name, description, due_date, priority, employee, total_comments } = task;
- 
+  const {
+    id,
+    name,
+    description,
+    due_date,
+    priority,
+    employee,
+    total_comments,
+  } = task;
 
   return (
     <CardContainer href={`/taskpage/${id}`} border={border}>
@@ -378,19 +403,23 @@ const SingleCard = ({
           <PriorityButton priority={priority.name} size="small" />
           <CustomButton color={color} text={task.department.name} />
         </Buttons>
-       
       </Head>
       <Middle>
         <Title>{name}</Title>
         <Description>{description}</Description>
       </Middle>
       <Bottom>
-        <Avatar src={employee.avatar} alt={`${employee.name} ${employee.surname}`} width={24} height={24} />
+        <Avatar
+          src={employee.avatar}
+          alt={`${employee.name} ${employee.surname}`}
+          width={24}
+          height={24}
+        />
         <EmployeeName>
           {employee.name} {employee.surname}
         </EmployeeName>
         <Comments>
-          <Image src="/images/Comments.png" alt="" width={16} height={16} />
+          <Image src="Comments.svg" alt="" width={16} height={16} />
           <p>{total_comments}</p>
         </Comments>
       </Bottom>
